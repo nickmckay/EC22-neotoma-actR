@@ -41,7 +41,7 @@ awards:
     name: Collaborative Award to something or other.
     url: https://example.com/awards/25002021
 
-bibliography: yourbibtex.bib
+bibliography: book.bib
 keywords:
 - bullet
 - points
@@ -55,7 +55,7 @@ knitr::opts_chunk$set(echo = TRUE)
 # Please use the `pacman` package to load your packages:
  #install.packages("pacman",repos = "https://cran.rstudio.com/")
  pacman::p_load("dplyr","magrittr","tidyr")
- pacman::p_load_gh("nickmckay/lipdR", "nickmckay/geoChronR", "NeotomaDB/neotoma2", "LinkedEarth/actR")
+ pacman::p_load_gh("nickmckay/lipdR@neotoma2lipd", "nickmckay/geoChronR", "NeotomaDB/neotoma2", "LinkedEarth/actR")
 ```
 
 # Abstract
