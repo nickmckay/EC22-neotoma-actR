@@ -1,3 +1,5 @@
 # EC22-neotoma-actR
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/nickmckay/EC22-neotoma-actR/HEAD?labpath=EC22-neotoma-actR.Rmd)
+<!-- badges: start -->
+[![Launch Rstudio Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/nickmckay/EC22-neotoma-actR/master?urlpath=rstudio)
+<!-- badges: end -->
