@@ -1,0 +1,300 @@
+---
+title: "Database interoperability, uncertainty quantification and reproducible workflows in the paleogeosciences"
+author:
+- name: MyName
+  email: authorone@example.com
+  affiliation: Institute One
+  correspondence: no
+  url: http://example.com/personone
+- name: MyName
+  email: authortwo@example.com
+  affiliation: Institute One; Insitute Two
+  correspondence: yes
+  url: http://example.com/persontwo
+date: "2022/10/23"
+output:
+  html_document:
+    number_sections: yes
+    toc: yes
+  pdf_document:
+    toc: yes
+institute:
+- name: Institute One
+  address: 5555 Example St
+  city: City
+  region: Province
+  country: Country
+- name: Institute Two
+  address: 4444 Demonstration Ave
+  city: town
+  region: State
+  country: Country
+awards:
+- ShortAwardName:
+    sponsor: Example.com Award Foundation
+    identifier: 25002020
+    name: Collaborative Award to something or other.
+    url: https://example.com/awards/25002020
+- NextShortAwardName:
+    sponsor: Example.com Award Foundation
+    identifier: 25002021
+    name: Collaborative Award to something or other.
+    url: https://example.com/awards/25002021
+
+bibliography: yourbibtex.bib
+keywords:
+- bullet
+- points
+- for
+- each
+- keyword
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# Please use the `pacman` package to load your packages:
+ install.packages("pacman",repos = "https://cran.rstudio.com/")
+ pacman::p_load("dplyr","magrittr")
+ pacman::p_load_gh("nickmckay/lipdR", "nickmckay/geoChronR", "NeotomaDB/neotoma2", "LinkedEarth/actR")
+```
+
+# Purpose
+State the purpose of the notebook.
+
+This notebook presents a template and outlines best practices for documenting and formatting Jupyter notebooks and related resources for submission to EarthCube repository. This notebook is developed for RMarkdown, and expects a standard R environment for execution.  
+
+If you choose to use references in your document, use an associated `BibTex` file, and ensure that it is included in your repository and the YAML header information.  You reference in-text in the following manner:
+
+```markdown
+Here is my text and what I am referencing {@bibtex2008}.
+```
+
+and your BibTex file will have an associated entry:
+
+```bibtex
+@article{bibtex2008,
+  title={The name of the article},
+  author={Lastname, Firstname},
+  journal={Journal of Names},
+  . . .
+}
+```
+
+The RMarkdown file should render successfully using the commandline argument `Rscript -e 'rmarkdown::render("yourfile.Rmd")'`.  If it uses some other method for rendering, please ensure that the reviewers are aware of this.
+
+# Technical contributions
+
+Summarize the central contributions of the notebook (libraries created, scientific analysis demonstrated, etc.), as a bullet list, with one or more bullets.
+
+Examples:
+
+* demonstration of scientific analysis leveraging existing API (explain)
+* development of underlying API that is exposed in the notebook (state which components are developed by the author, and point to documentation)
+* development of local libraries imported in the notebook (they should be submitted along with the notebook and documented in the same way)
+
+# Methodology
+
+Quickly describe assumptions and processing steps. Include URLs as necessary.
+
+Most cells in this notebook are markdown cells. They describe the expected content of the notebook, steps for formatting and sumitting notebooks, and relevant technologies. The proposed structure and procedures are based on community input and literature (see References).
+.
+
+Markdown headings are automatically numbered and organized into a Table of Contents (ToC) using a table of contents, implemented in the `yaml` header:
+
+```yaml
+toc: true
+```
+
+# Results
+
+Describe and comment on the most important results. Include images and URLs as necessary.
+
+This template presents the general structure of notebooks expected by EarthCube, along with recommendations for additional resources to be created to ensure that the notebook is easy to re-use.
+
+# Funding
+
+Include references to awards that supported this research. Add as many award references as you need, using the YAML template included at the head of this document.
+
+
+# Keywords
+
+Include up to 5 keywords, within the YAML header above, using the format:
+
+```yaml
+keywords:
+    - template
+    - EarthCube
+    - some subject
+    - science
+    - cool stuff
+```
+
+# Citation
+
+Include the recommended citation for the document.  You may choose to use Zenodo, or another service (such as figShare or your University services) to obtain a DOI for your code repository.  If you are using GitHub, consider adding a [GitHub Citation file](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-citation-files).  Ensure that the title in the suggested citation, and the authors match those in your YAML header.
+
+For example:
+
+* EarthCube Office, 2021. EarthCube Notebook Template. Accessed 2/1/2021 at https://github.com/earthcube/NotebookTemplates
+
+# Work In Progress - improvements
+
+Use this section only if the notebook is not final.  Describe general ideas here using prose.
+
+## Notable TODOs
+
+Identify specific tasks here as bullets.
+
+* todo 1
+* todo 2
+* todo 3
+
+# Suggested next steps
+
+State suggested next steps, based on results obtained in this notebook. This section is optional.
+
+# Acknowledgements
+
+Include any relevant acknowledgements, apart from funding (which was in section 5).
+
+
+The template is licensed under a [Creative Commons Attribution 4.0 International License](http://creativecommons.org/licenses/by/4.0/).
+
+# Setup
+
+You will need to download the Rmd, HTML and bibtex file from the earthcube repository, store it in a single directory and then set up a project (see [this link](https://swcarpentry.github.io/r-novice-gapminder/02-project-intro/) for further discussion of this.)
+
+## Packages 
+Install all the required packages in the r setup section at the head of this document. As noted previously, use pacman to do the installation.
+
+The code  below is an example.  
+It is a good practice to organize the imported packages by functionality.
+
+```{r}
+```
+
+## Local library import
+Create a file with the source code of local packages inside the project to make sure that the folder can be reproducible in other machines and run a source command.
+
+## Parameter definitions
+Set all relevant parameters for the notebook. By convention, parameters are uppercase, while all the other variables follow R guidelines.
+
+## Data import
+Retrieve all the required data for the analysis. Include brief data descriptions, and DOIs where possible.
+
+Please import data in one of two ways:
+1. Reference data that is available online and continuously managed (preferred). 
+2. If the data is relatively small, please include the files along with the notebook (in the same directory). If you deal with large data, include a subset.
+
+## Data processing and analysis
+The core of the notebook is here. Split this section into subsections as required, and explain processing and analysis steps.
+
+
+```{r}
+L <- get_sites(sitename = "Bambili 2") %>%
+  get_downloads() %>%
+  neotoma2lipd()
+```
+
+
+```{r}
+L <- runBacon(L,
+              lab.id.var = 'neotomaChronConrolId',
+              age.14c.var = NULL,
+              age.14c.uncertainty.var = NULL,
+              age.var = 'age',
+              age.uncertainty.var = 'ageUnc',
+              depth.var = 'depth',
+              reservoir.age.14c.var = NULL,
+              reservoir.age.14c.uncertainty.var = NULL,
+              rejected.ages.var = NULL,
+              accept.suggestions = TRUE)
+
+```
+
+```{r}
+L <- mapAgeEnsembleToPaleoData(L)
+
+ageEnsemble <- selectData(L,"ageEnsemble")
+
+```
+
+
+
+
+```{r}
+TRSH <- as.lipdTsTibble(L) %>%
+  dplyr::filter(paleoData_ecologicalgroup == "TRSH") %>%
+  tabulateTs(time.var = "age") %>% 
+  rowwise() %>%
+  mutate(total = sum(c_across(-age),na.rm = TRUE))
+```
+
+
+```{r}
+total <- as.lipdTsTibble(L) %>%
+  dplyr::filter(paleoData_ecologicalgroup %in% c("TRSH","UPHE","VACR","SUCC","MANG")) %>%
+  tabulateTs(time.var = "age") %>%
+  rowwise() %>%
+  mutate(total = sum(c_across(-age),na.rm = TRUE))
+```
+
+
+```{r}
+treeShrubPercent <- TRSH$total/total$total
+plotTimeseriesEnsRibbons(X = ageEnsemble, Y =  test)
+
+```
+
+Selected best practices for organizing and formatting your notebooks are included below.
+
+## The 10 rules
+These recommendations are based on (@rule_ten_2019):
+
+1. Tell a story for an audience: interleave explanatory text with code and results to create a computational narrative.
+
+2. Document the process, not just the results: so that others, and yourself later, will understand your reasoning and choices.
+
+3. Use cell divisions to make steps clear: have each piece of R perform one meaningful and documented step, avoid long pieces of R.
+
+4. Modularize code: use and document functions for repeated operations to make the code more readable and save space.
+
+5. Record dependencies: use (for example) Conda package manager, with environment.yml (Conda). Please indicate package versions explicitly. Ideally, include a listing of dependencies at the bottom of the notebook. Make sure you test your notebook in an environment created from these dependencies, so that you don't add undocumented dependencies (we discuss this more in using Binder.
+
+6. Use version control such as git.
+
+7. Build a pipeline: place key variable declarations at the top. Test with different parameters, clean up, and run all R code  to prepare for potential non-interactive execution.
+
+8. Share and explain your data: if the original data are too big, include a sample. Make sure that the data is accessible. Include data description, and any processing done beforehand. Ideally, point to datasets that have been permanently managed and identified by DOIs.
+
+9. Design your notebooks to be read, run, and explored:  
+    9.1. Read: store it in a public code repository with a clear README file and a liberal open source license. Generate HTML/PDF versions of the final notebook.  
+    9.2. Run: use Binder to run it in the cloud.  
+    9.3. Explore: use interactive widgets (e.g., Shiny) 
+    
+10. Advocate for open research: ask your colleagues or friends to try to run your notebooks.
+
+## Creating Binder for your notebook repository
+
+Sharing just the markdown file is not sufficient for broad re-usability. We strongly recommend that Rmarkdown notebooks are submitted to EarthCube in Binders. The Binder service is a free service that allows anyone to run notebooks from their web browser without installing any software and resolving dependencies.
+
+Follow these steps:
+
+Assemble the R markdown, additional source files, datasets, and a README, in a single project directory (and sub-directories off of it, as needed). In the same project directory create a separate R script called install.R with the commands to install all the relevant external packages and a file runtime.txt with the version of R you want to use. This latter file should have a one line entry of the form 
+
+```markdown
+r-4.1.0-2021-05-18
+```
+
+(you can find out the version you are running using the R.version command).
+Use GitHub to organize your project as a GitHub repository.
+Create Binder. Use http://mybinder.org to create a URL for your notebook Binder (you will need to enter your GitHub repo URL). You can also add a Launch Binder button directly to your GitHub repo, by including the following in your README.md:
+launch with myBinder
+[![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/<path to your repo>)
+Specific projects may have their own Binder implementations. In this case, include a project-specific Binder reference so that reviewers can execute your code.
+
+An example implementation of R on binder can be found [here](https://github.com/binder-examples/r).
+
+Expect the reviewers to use a browser of their choice to run your code, and try to avoid special execution requirements that make it difficult for users to appreciate your work.
+
+# References
