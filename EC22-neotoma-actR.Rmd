@@ -54,50 +54,37 @@ keywords:
 knitr::opts_chunk$set(echo = TRUE)
 # Please use the `pacman` package to load your packages:
  #install.packages("pacman",repos = "https://cran.rstudio.com/")
- pacman::p_load("dplyr","magrittr")
+ pacman::p_load("dplyr","magrittr","tidyr")
  pacman::p_load_gh("nickmckay/lipdR", "nickmckay/geoChronR", "NeotomaDB/neotoma2", "LinkedEarth/actR")
 ```
 
+# Abstract
+
+The paleogeosciences are becoming more and more interdisciplinary, and studies increasingly rely on large collections of data derived from multiple data repositories. Integrating diverse datasets from multiple sources into complex workflows increases the challenge of creating reproducible and open science, as data formats and tools are often noninteroperable, requiring manual manipulation of data into standardized formats, resulting in a disconnect in data provenance and confounding reproducibility. Here we present a notebook that demonstrates how the Linked PaleoData (LiPD) framework is used as an interchange format to allow data from multiple data sources to be integrated in a complex workflow using emerging packages in R for geochronological uncertainty quantification and abrupt change detection. Specifically, in this notebook, we use the neotoma2 and lipdR packages to access paleoecological data from the Neotoma Database, and paleoclimate data from compilations hosted on Lipdverse. Age uncertainties for datasets from both sources are then quantified using the geoChronR package, and those data, and their associated age uncertainties, are then investigated for abrupt changes using the actR package, with accompanying visualizations. The result is an integrated, reproducible workflow in R that demonstrates how this complex series of multisource data integration, analysis and visualization can be integrated into an efficient, open scientific narrative.
+
 # Purpose
-State the purpose of the notebook.
 
-This notebook presents a template and outlines best practices for documenting and formatting Jupyter notebooks and related resources for submission to EarthCube repository. This notebook is developed for RMarkdown, and expects a standard R environment for execution.  
+This notebook showcases a workflow that uses emerging tools to efficiently access a pollen dataset from Neotoma (ref), create an age model using Bacon (ref), store the age ensemble and create visualizations using `geoChronR`, before finally conducting age-uncertain change detection using the Abrupt Change Toolkit in R (actR) (ref).
 
-If you choose to use references in your document, use an associated `BibTex` file, and ensure that it is included in your repository and the YAML header information.  You reference in-text in the following manner:
 
-```markdown
-Here is my text and what I am referencing {@bibtex2008}.
-```
-
-and your BibTex file will have an associated entry:
-
-```bibtex
-@article{bibtex2008,
-  title={The name of the article},
-  author={Lastname, Firstname},
-  journal={Journal of Names},
-  . . .
-}
-```
 
 The RMarkdown file should render successfully using the commandline argument `Rscript -e 'rmarkdown::render("yourfile.Rmd")'`.  If it uses some other method for rendering, please ensure that the reviewers are aware of this.
 
 # Technical contributions
 
-Summarize the central contributions of the notebook (libraries created, scientific analysis demonstrated, etc.), as a bullet list, with one or more bullets.
+This notebook highlights recent advances in multiple R packages
 
-Examples:
-
-* demonstration of scientific analysis leveraging existing API (explain)
-* development of underlying API that is exposed in the notebook (state which components are developed by the author, and point to documentation)
-* development of local libraries imported in the notebook (they should be submitted along with the notebook and documented in the same way)
+* The new `neotoma2` package (cite)
+* An overhauled `neotoma2lipd()` function in the `lipdR` package based on `neotoma2` that converts a `neotoma2` site object into a `lipdR` lipd object 
+* Using lipd objects and `geoChronR` to create age models and store ensemble data
+* Conduct robust, age-uncertain, abrupt change analysis on neotoma data using `actR`
 
 # Methodology
 
-Quickly describe assumptions and processing steps. Include URLs as necessary.
+`neotoma2` leverages Neotoma's xxx API, geojson and S4 structures. `lipdR::neotoma2lipd()` converts `neotoma2` site objects into `lipdR` lipd objects.
 
 Most cells in this notebook are markdown cells. They describe the expected content of the notebook, steps for formatting and sumitting notebooks, and relevant technologies. The proposed structure and procedures are based on community input and literature (see References).
-.
+
 
 Markdown headings are automatically numbered and organized into a Table of Contents (ToC) using a table of contents, implemented in the `yaml` header:
 
@@ -137,22 +124,6 @@ For example:
 
 * EarthCube Office, 2021. EarthCube Notebook Template. Accessed 2/1/2021 at https://github.com/earthcube/NotebookTemplates
 
-# Work In Progress - improvements
-
-Use this section only if the notebook is not final.  Describe general ideas here using prose.
-
-## Notable TODOs
-
-Identify specific tasks here as bullets.
-
-* todo 1
-* todo 2
-* todo 3
-
-# Suggested next steps
-
-State suggested next steps, based on results obtained in this notebook. This section is optional.
-
 # Acknowledgements
 
 Include any relevant acknowledgements, apart from funding (which was in section 5).
@@ -166,25 +137,6 @@ You will need to download the Rmd, HTML and bibtex file from the earthcube repos
 
 ## Packages 
 Install all the required packages in the r setup section at the head of this document. As noted previously, use pacman to do the installation.
-
-The code  below is an example.  
-It is a good practice to organize the imported packages by functionality.
-
-```{r}
-```
-
-## Local library import
-Create a file with the source code of local packages inside the project to make sure that the folder can be reproducible in other machines and run a source command.
-
-## Parameter definitions
-Set all relevant parameters for the notebook. By convention, parameters are uppercase, while all the other variables follow R guidelines.
-
-## Data import
-Retrieve all the required data for the analysis. Include brief data descriptions, and DOIs where possible.
-
-Please import data in one of two ways:
-1. Reference data that is available online and continuously managed (preferred). 
-2. If the data is relatively small, please include the files along with the notebook (in the same directory). If you deal with large data, include a subset.
 
 ## Data processing and analysis
 The core of the notebook is here. Split this section into subsections as required, and explain processing and analysis steps.
@@ -274,27 +226,5 @@ These recommendations are based on (@rule_ten_2019):
     
 10. Advocate for open research: ask your colleagues or friends to try to run your notebooks.
 
-## Creating Binder for your notebook repository
-
-Sharing just the markdown file is not sufficient for broad re-usability. We strongly recommend that Rmarkdown notebooks are submitted to EarthCube in Binders. The Binder service is a free service that allows anyone to run notebooks from their web browser without installing any software and resolving dependencies.
-
-Follow these steps:
-
-Assemble the R markdown, additional source files, datasets, and a README, in a single project directory (and sub-directories off of it, as needed). In the same project directory create a separate R script called install.R with the commands to install all the relevant external packages and a file runtime.txt with the version of R you want to use. This latter file should have a one line entry of the form 
-
-```markdown
-r-4.1.0-2021-05-18
-```
-
-(you can find out the version you are running using the R.version command).
-Use GitHub to organize your project as a GitHub repository.
-Create Binder. Use http://mybinder.org to create a URL for your notebook Binder (you will need to enter your GitHub repo URL). You can also add a Launch Binder button directly to your GitHub repo, by including the following in your README.md:
-launch with myBinder
-[![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/<path to your repo>)
-Specific projects may have their own Binder implementations. In this case, include a project-specific Binder reference so that reviewers can execute your code.
-
-An example implementation of R on binder can be found [here](https://github.com/binder-examples/r).
-
-Expect the reviewers to use a browser of their choice to run your code, and try to avoid special execution requirements that make it difficult for users to appreciate your work.
 
 # References
