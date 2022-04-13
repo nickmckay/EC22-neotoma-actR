@@ -242,7 +242,7 @@ total <- as.lipdTsTibble(L) %>%
 
 ```{r}
 treeShrubPercent <- TRSH$total/total$total
-plotTimeseriesEnsRibbons(X = ageEnsemble, Y =  test)
+plotTimeseriesEnsRibbons(X = ageEnsemble, Y =  treeShrubPercent)
 
 ```
 
