@@ -109,13 +109,16 @@ Install all the required packages in the R setup section at the head of this doc
 
 ## Data processing and analysis
 
+*Note: The code and analysis is final, but the text is not. Should be final no later than April 20.* 
+
 The paleogeosciences are becoming more and more interdisciplinary, and studies increasingly rely on large collections of data derived from multiple data repositories. Integrating diverse datasets from multiple sources into complex workflows increases the challenge of creating reproducible and open science, as data formats and tools are often noninteroperable, requiring manual manipulation of data into standardized formats, resulting in a disconnect in data provenance and confounding reproducibility. Here, we illustrate a use case where a scientist wants to conduct age-uncertain abrupt-change analysis on two datasets from Africa - a pollen record from Lake Bambili, and a temperature reconstruction from the Gulf of Guinea. 
 
 
 ### Lake Bambili 
 
-Lake Bambili is a .....
-Recently, Lezine et al. published a study...
+Lake Bambili is a high-elevation (2273 masl) crater lake in Cameroon (05° 56′ 11.9 N, 10°14′ 31.6 E) in the highlands of equatorial West Africa. Recently, Lezine et al. (2019) published a study using pollen data to show changes in forest composition over the past 90,000 years. In this notebook, we'll take a look at abrupt shifts in these pollen assemblages, and compare them changes in a nearby climate record from the Gulf of Guinea.
+
+Thankfully, Lezine et al. (2019) archived their pollen assemblage data at Neotoma, and we'll use the `neotoma2` package to access the data, in this case, searching by sitename. 
 
 ```{r}
 L <- neotoma2::get_sites(sitename = "Bambili 2") %>%
@@ -150,8 +153,6 @@ L <- mapAgeEnsembleToPaleoData(L)
 ageEnsemble <- selectData(L,"ageEnsemble")
 
 ```
-
-
 
 
 ```{r}
@@ -209,34 +210,3 @@ MD03_2707_ms <-  actR::detectShift(MD03_2707_ts,
 ```{r}
 plot(MD03_2707_ms)
 ```
-
-Selected best practices for organizing and formatting your notebooks are included below.
-
-## The 10 rules
-These recommendations are based on (@rule_ten_2019):
-
-1. Tell a story for an audience: interleave explanatory text with code and results to create a computational narrative.
-
-2. Document the process, not just the results: so that others, and yourself later, will understand your reasoning and choices.
-
-3. Use cell divisions to make steps clear: have each piece of R perform one meaningful and documented step, avoid long pieces of R.
-
-4. Modularize code: use and document functions for repeated operations to make the code more readable and save space.
-
-5. Record dependencies: use (for example) Conda package manager, with environment.yml (Conda). Please indicate package versions explicitly. Ideally, include a listing of dependencies at the bottom of the notebook. Make sure you test your notebook in an environment created from these dependencies, so that you don't add undocumented dependencies (we discuss this more in using Binder.
-
-6. Use version control such as git.
-
-7. Build a pipeline: place key variable declarations at the top. Test with different parameters, clean up, and run all R code  to prepare for potential non-interactive execution.
-
-8. Share and explain your data: if the original data are too big, include a sample. Make sure that the data is accessible. Include data description, and any processing done beforehand. Ideally, point to datasets that have been permanently managed and identified by DOIs.
-
-9. Design your notebooks to be read, run, and explored:  
-    9.1. Read: store it in a public code repository with a clear README file and a liberal open source license. Generate HTML/PDF versions of the final notebook.  
-    9.2. Run: use Binder to run it in the cloud.  
-    9.3. Explore: use interactive widgets (e.g., Shiny) 
-    
-10. Advocate for open research: ask your colleagues or friends to try to run your notebooks.
-
-
-# References
