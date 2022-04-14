@@ -1,16 +1,19 @@
 ---
 title: "Database interoperability, uncertainty quantification and reproducible workflows in the paleogeosciences"
 author:
-- name: MyName
-  email: authorone@example.com
-  affiliation: Institute One
-  correspondence: no
-  url: http://example.com/personone
-- name: MyName
-  email: authortwo@example.com
-  affiliation: Institute One; Insitute Two
+- name: Nicholas McKay
+  email: nick@nau.edu
+  affiliation: Northern Arizona University
   correspondence: yes
-  url: http://example.com/persontwo
+  url: http://nau.edu/mckay
+- name: Julien Emile-Geay
+  email: julieneg@usc.edu
+  affiliation: University of Southern California
+  correspondence: no
+- name: Deborah Khider
+  email: Khider@usc.edu
+  affiliation: University of Southern California
+  correspondence: no
 date: "2022/10/23"
 output:
   html_document:
@@ -19,40 +22,32 @@ output:
   pdf_document:
     toc: yes
 institute:
-- name: Institute One
-  address: 5555 Example St
-  city: City
-  region: Province
-  country: Country
-- name: Institute Two
-  address: 4444 Demonstration Ave
-  city: town
-  region: State
-  country: Country
+- name: Northern Arizona University
+  city: Flagstaff
+  region: Arizona
+  country: USA
+- name: University of Southern California
+  city: Los Angeles
+  region: California
+  country: USA
 awards:
 - ShortAwardName:
-    sponsor: Example.com Award Foundation
-    identifier: 25002020
-    name: Collaborative Award to something or other.
-    url: https://example.com/awards/25002020
-- NextShortAwardName:
-    sponsor: Example.com Award Foundation
-    identifier: 25002021
-    name: Collaborative Award to something or other.
-    url: https://example.com/awards/25002021
+    sponsor: Belmont Forum's Science-driven e-Infrastructure Innovation (SEI) initiative
+    identifier: NSF-ICER-1929460
+    name: ACCEDE
+    url: https://www.nsf.gov/awardsearch/showAward?AWD_ID=1929460&HistoricalAwards=false
 
 bibliography: book.bib
 keywords:
-- bullet
-- points
-- for
-- each
-- keyword
+- paleoclimate
+- paleoecology
+- abrupt change
+- R
+- LiPD
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-# Please use the `pacman` package to load your packages:
  #install.packages("pacman",repos = "https://cran.rstudio.com/")
  pacman::p_load("dplyr","magrittr","tidyr")
  pacman::p_load_gh("nickmckay/lipdR@neotoma2lipd", "nickmckay/geoChronR", "NeotomaDB/neotoma2", "LinkedEarth/actR")
@@ -66,16 +61,12 @@ The paleogeosciences are becoming more and more interdisciplinary, and studies i
 
 This notebook showcases a workflow that uses emerging tools to efficiently access a pollen dataset from Neotoma (ref), create an age model using Bacon (ref), store the age ensemble and create visualizations using `geoChronR`, before finally conducting age-uncertain change detection using the Abrupt Change Toolkit in R (actR) (ref).
 
-
-
-The RMarkdown file should render successfully using the commandline argument `Rscript -e 'rmarkdown::render("yourfile.Rmd")'`.  If it uses some other method for rendering, please ensure that the reviewers are aware of this.
-
 # Technical contributions
 
 This notebook highlights recent advances in multiple R packages
 
 * The new `neotoma2` package (cite)
-* An overhauled `neotoma2lipd()` function in the `lipdR` package based on `neotoma2` that converts a `neotoma2` site object into a `lipdR` lipd object 
+* An overhauled `neotoma2lipd()` function in the `lipdR` package
 * Using lipd objects and `geoChronR` to create age models and store ensemble data
 * Conduct robust, age-uncertain, abrupt change analysis on neotoma data using `actR`
 
@@ -83,10 +74,6 @@ This notebook highlights recent advances in multiple R packages
 
 `neotoma2` leverages Neotoma's xxx API, geojson and S4 structures. `lipdR::neotoma2lipd()` converts `neotoma2` site objects into `lipdR` lipd objects.
 
-Most cells in this notebook are markdown cells. They describe the expected content of the notebook, steps for formatting and sumitting notebooks, and relevant technologies. The proposed structure and procedures are based on community input and literature (see References).
-
-
-Markdown headings are automatically numbered and organized into a Table of Contents (ToC) using a table of contents, implemented in the `yaml` header:
 
 ```yaml
 toc: true
@@ -94,27 +81,12 @@ toc: true
 
 # Results
 
-Describe and comment on the most important results. Include images and URLs as necessary.
-
-This template presents the general structure of notebooks expected by EarthCube, along with recommendations for additional resources to be created to ensure that the notebook is easy to re-use.
+This notebook demonstrates how the Linked PaleoData (LiPD) framework can be used as an interchange format to allow data from multiple data sources to be integrated in a complex workflow using emerging packages in R for geochronological uncertainty quantification and abrupt change detection. Efficient workflows that support data from multiple sources are an important component of reproducible science.
 
 # Funding
 
-Include references to awards that supported this research. Add as many award references as you need, using the YAML template included at the head of this document.
+This project is funded as part of the Belmont Forum's Science-driven e-Infrastructure Innovation (SEI) initiative. In the US, this is NSF award ICER-1929460.
 
-
-# Keywords
-
-Include up to 5 keywords, within the YAML header above, using the format:
-
-```yaml
-keywords:
-    - template
-    - EarthCube
-    - some subject
-    - science
-    - cool stuff
-```
 
 # Citation
 
@@ -126,26 +98,34 @@ For example:
 
 # Acknowledgements
 
-Include any relevant acknowledgements, apart from funding (which was in section 5).
-
-
-The template is licensed under a [Creative Commons Attribution 4.0 International License](http://creativecommons.org/licenses/by/4.0/).
+Thank you to Socorro Dominguez Vidana and Simon Goring for their work on the `neotoma2` and to the scientists who generated and shared the Bambili pollen data and the MD03-2707 paleotemperature data. 
 
 # Setup
 
-You will need to download the Rmd, HTML and bibtex file from the earthcube repository, store it in a single directory and then set up a project (see [this link](https://swcarpentry.github.io/r-novice-gapminder/02-project-intro/) for further discussion of this.)
+You will need to download the Rmd, HTML and bibtex file from the earthcube repository, store it in a single directory and then set up a project (see [this link](https://swcarpentry.github.io/r-novice-gapminder/02-project-intro/) for further discussion of this.) Then you can either knit the markdown file, or run the cells interactively. 
 
 ## Packages 
-Install all the required packages in the r setup section at the head of this document. As noted previously, use pacman to do the installation.
+Install all the required packages in the R setup section at the head of this document. As noted previously, use pacman to do the installation. Alternatively, use the `install.R` script in the repository, or run on mybinder, if that ever works.
 
 ## Data processing and analysis
-The core of the notebook is here. Split this section into subsections as required, and explain processing and analysis steps.
+
+The paleogeosciences are becoming more and more interdisciplinary, and studies increasingly rely on large collections of data derived from multiple data repositories. Integrating diverse datasets from multiple sources into complex workflows increases the challenge of creating reproducible and open science, as data formats and tools are often noninteroperable, requiring manual manipulation of data into standardized formats, resulting in a disconnect in data provenance and confounding reproducibility. Here, we illustrate a use case where a scientist wants to conduct age-uncertain abrupt-change analysis on two datasets from Africa - a pollen record from Lake Bambili, and a temperature reconstruction from the Gulf of Guinea. 
+
+
+### Lake Bambili 
+
+Lake Bambili is a .....
+Recently, Lezine et al. published a study...
+
+```{r}
+L <- neotoma2::get_sites(sitename = "Bambili 2") %>%
+  neotoma2::get_downloads() %>%
+  lipdR::neotoma2lipd()
+```
 
 
 ```{r}
-L <- get_sites(sitename = "Bambili 2") %>%
-  get_downloads() %>%
-  neotoma2lipd()
+mapLipd(L,map.type = "stamen",extend.range = 5)
 ```
 
 
@@ -196,6 +176,38 @@ total <- as.lipdTsTibble(L) %>%
 treeShrubPercent <- TRSH$total/total$total
 plotTimeseriesEnsRibbons(X = ageEnsemble, Y =  treeShrubPercent)
 
+```
+
+
+```{r}
+treeShrubMeanShift <- actR::detectShift(time = ageEnsemble$values,
+                  time.variable.name = "age",
+                  time.units = "BP",
+                  vals = treeShrubPercent,
+                  vals.variable.name = "Tree/Shrub",
+                  vals.units = "%",
+                  summary.bin.step = 500,
+                  time.range = c(20000,90000))
+```
+
+
+```{r}
+MD03_2707 <- readLipd("https://lipdverse.org/Temp12k/1_0_2/MD03_2707.Weldeab.2007.ensembles.lpd")
+
+mapLipd(MD03_2707,map.type = "stamen",extend.range = 5)
+MD03_2707_ts <- mapAgeEnsembleToPaleoData(MD03_2707) %>% as.lipdTsTibble()
+```
+
+```{r,warning=FALSE}
+MD03_2707_ms <-  actR::detectShift(MD03_2707_ts,
+                   vals.variable.name = "SST_from_d18o_ruber_pink_ensemble",
+                  summary.bin.step = 500,
+                  time.range = c(20000,90000))
+```
+
+
+```{r}
+plot(MD03_2707_ms)
 ```
 
 Selected best practices for organizing and formatting your notebooks are included below.
