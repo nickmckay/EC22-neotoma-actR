@@ -14,7 +14,7 @@ author:
   email: Khider@usc.edu
   affiliation: University of Southern California
   correspondence: no
-date: "2022/10/23"
+date: "2022/04/22"
 output:
   html_document:
     number_sections: yes
@@ -37,7 +37,7 @@ awards:
     name: ACCEDE
     url: https://www.nsf.gov/awardsearch/showAward?AWD_ID=1929460&HistoricalAwards=false
 
-bibliography: book.bib
+bibliography: [book.bib, packages.bib, geochronr.bib]
 keywords:
 - paleoclimate
 - paleoecology
@@ -68,16 +68,13 @@ This notebook highlights recent advances in multiple R packages
 * The new `neotoma2` package (cite)
 * An overhauled `neotoma2lipd()` function in the `lipdR` package
 * Using lipd objects and `geoChronR` to create age models and store ensemble data
-* Conduct robust, age-uncertain, abrupt change analysis on neotoma data using `actR`
+* Conducting robust, age-uncertain, abrupt change analysis on neotoma data using `actR`
 
 # Methodology
 
 `neotoma2` leverages Neotoma's xxx API, geojson and S4 structures. `lipdR::neotoma2lipd()` converts `neotoma2` site objects into `lipdR` lipd objects.
 
 
-```yaml
-toc: true
-```
 
 # Results
 
@@ -109,8 +106,6 @@ Install all the required packages in the R setup section at the head of this doc
 
 ## Data processing and analysis
 
-*Note: The code and analysis is final, but the text is not. Should be final no later than April 20.* 
-
 The paleogeosciences are becoming more and more interdisciplinary, and studies increasingly rely on large collections of data derived from multiple data repositories. Integrating diverse datasets from multiple sources into complex workflows increases the challenge of creating reproducible and open science, as data formats and tools are often noninteroperable, requiring manual manipulation of data into standardized formats, resulting in a disconnect in data provenance and confounding reproducibility. Here, we illustrate a use case where a scientist wants to conduct age-uncertain abrupt-change analysis on two datasets from Africa - a pollen record from Lake Bambili, and a temperature reconstruction from the Gulf of Guinea. 
 
 
@@ -120,20 +115,27 @@ Lake Bambili is a high-elevation (2273 masl) crater lake in Cameroon (05° 56′
 
 Thankfully, Lezine et al. (2019) archived their pollen assemblage data at Neotoma, and we'll use the `neotoma2` package to access the data, in this case, searching by sitename. 
 
-```{r}
-L <- neotoma2::get_sites(sitename = "Bambili 2") %>%
-  neotoma2::get_downloads() %>%
-  lipdR::neotoma2lipd()
+```{r, message=FALSE,results = 'hide'}
+L <- neotoma2::get_sites(sitename = "Bambili 2") %>% #Find the site of interest
+  neotoma2::get_downloads() %>% #download the data for this site
+  lipdR::neotoma2lipd() #convert the site object into a LiPD object
 ```
 
+Now that we've downloaded the data and converted it to a LiPD object, it's ready to be used in LinkedEarth's ecosystem of tools built around the LiPD standard (e.g., geoChronR, actR, pyleoclim)
 
-```{r}
+First, let's quickly create a map using the `mapLipd()` function in geoChronR to visualize Lake Bambili's location in equatorial west Africa. 
+
+
+```{r,results = "hide",message= FALSE,warning=FALSE}
 mapLipd(L,map.type = "stamen",extend.range = 5)
 ```
 
+### Age modelling
 
-```{r}
-L <- runBacon(L,
+In this notebook, we want to take a look at some of the abrupt changes in ecosystems recorded by pollen assemblages in this lake, while propagating age uncertainties. Neotoma does not store age ensembles, so we will need to generate a new age model. Here we'll use Bacon [@Blaauw2011BACON], one of the methods built into geoChronR, to create an age model and import the ensembles into the LiPD structure. Here, we've specified alll of the parameters so it will run without input, but it's often convenient to call `runBacon()` with fewer inputs and run it interactively. 
+
+```{r, message=FALSE,results='hide',cache=TRUE,fig.show='hide'}
+L <- geoChronR::runBacon(L,
               lab.id.var = 'neotomaChronConrolId',
               age.14c.var = NULL,
               age.14c.uncertainty.var = NULL,
@@ -143,26 +145,45 @@ L <- runBacon(L,
               reservoir.age.14c.var = NULL,
               reservoir.age.14c.uncertainty.var = NULL,
               rejected.ages.var = NULL,
+              plot.pdf = FALSE, 
               accept.suggestions = TRUE)
-
 ```
+
+Now that the age model has finished running and the results are stored in the LiPD object, let's plot the results. 
+
+```{r}
+plotChronEns(L)
+```
+
+Great, the uncertainties represented here are what we'd like to propagate through the abrupt change analysis. To do this, the first step is to "map" the age ensemble from the age model to the depths of the pollen data stored in the paleoData tables. 
 
 ```{r}
 L <- mapAgeEnsembleToPaleoData(L)
-
-ageEnsemble <- selectData(L,"ageEnsemble")
-
 ```
+
+Now that that's done, let's select the paleoData age ensemble for future reference. 
+```{r}
+ageEnsemble <- selectData(L,"ageEnsemble")
+```
+
+
+### Paleoecological data analysis
+
+Now let's do some analysis on the paleoecological data. For this example, we will just perform a simple calculation. We're interested in percent of pollen counts that are classified as trees or shrubs by their "ecological group". 
+
+To do this, we will take advantage of lipdR's integration with tidyverse tools in R. So our first step will be to convert the LiPD dataset into a specialized "tibble" object. It's a regular tibble, where each row is a variable in the dataset, which includes all the metadata, and nested variables for time and paleodata values. We then use `dplyr` tools to calculate the total amount of tree and shrub pollen counts for each sample. Finally, we use the `magrittr` pipe for efficiency and clarity. See the comments in the code block for step by step explanations. 
 
 
 ```{r}
-TRSH <- as.lipdTsTibble(L) %>%
-  dplyr::filter(paleoData_ecologicalgroup == "TRSH") %>%
-  tabulateTs(time.var = "age") %>% 
-  rowwise() %>%
-  mutate(total = sum(c_across(-age),na.rm = TRUE))
+TRSH <- as.lipdTsTibble(L) %>% #convert the LiPD object to a LiPD Timeseries Tibble object
+  dplyr::filter(paleoData_ecologicalgroup == "TRSH") %>% #retain only the variables that are in the trees and shrubs ecological group
+  lipdR::tabulateTs(time.var = "age") %>% #convert this filtered lipd-ts-tibble to a traditional paleoecological data table, with observations in the rows and age and pollen variables in the columns
+  dplyr::rowwise() %>% #set up the analysis to row runwise
+  dplyr::mutate(total = sum(c_across(-age),na.rm = TRUE)) #and use mutate to calculate a new column, the sum of all pollen counts. 
 ```
 
+
+Great, we now have a regular tibble that includes all our sample levels, and a new "total" column that we've calculated. This will be the numerator in our "percent trees and shrubs" calculation. Let's repeat this process but with all of the non-aquatic pollen groups to ge the denominator. 
 
 ```{r}
 total <- as.lipdTsTibble(L) %>%
@@ -173,40 +194,102 @@ total <- as.lipdTsTibble(L) %>%
 ```
 
 
+Now we can calculate the percentage of tree and shrub pollen relative to total non-aquatic pollen. 
+
 ```{r}
-treeShrubPercent <- TRSH$total/total$total
-plotTimeseriesEnsRibbons(X = ageEnsemble, Y =  treeShrubPercent)
+treeShrubPercent <- TRSH$total/total$total * 100
 
 ```
 
 
+Now let's plot that percentage, along with the age ensemble, to visualize these data and their corresponding age uncertainties.
 ```{r}
-treeShrubMeanShift <- actR::detectShift(time = ageEnsemble$values,
-                  time.variable.name = "age",
-                  time.units = "BP",
-                  vals = treeShrubPercent,
-                  vals.variable.name = "Tree/Shrub",
-                  vals.units = "%",
-                  summary.bin.step = 500,
-                  time.range = c(20000,90000))
+geoChronR::plotTimeseriesEnsRibbons(X = ageEnsemble, Y =  treeShrubPercent)
 ```
 
+
+Interesting, it does look like there are some rapid changes in this dataset that are worth further exploration. 
+
+### Abrupt changes equatorial west African forest composition
+
+We've now used the data we accessed from neotoma to generate an age ensemble, and a derived paleoecological indicator, and we're ready to analyze these data to test whether or not the apparent abrupt shifts stand out given age uncertainties and a robust null hypothesis. To do this, we'll use the "abrupt change toolkit in R (actR)" package to test for shifts in the mean of these data. actR can accept lipd-ts-tibble data directly, or data, ensembles and metadata separately. In this case, since we generated the paleoecological indicator outside of LiPD, we'll use the latter strategy and specify the data explicitly. 
+
+```{r, cache = TRUE}
+treeShrubMeanShift <- actR::detectShift(time = ageEnsemble$values, #matrix of age ensemble data
+                  time.variable.name = "age", #variable name
+                  time.units = "BP", # and units
+                  vals = treeShrubPercent, #our paleoecological indicator (This could also be an ensemble if desired)
+                  vals.variable.name = "Tree/Shrub", #variable name
+                  vals.units = "%", # and units
+                  summary.bin.step = 500, #over what timestep should we examine the results?
+                  time.range = c(20000,90000)) #over what time range should we conduct the analysis. 
+
+```
+
+Because this methodology tests for abrupt shifts across the age ensemble and repeats the entire process with a null model to evaluate the robust null hypothesis level, it can take awhile to run. 
+
+Let's take a look at the results. The `print()` or `summarize()` methods will give some key details. 
+
+```{r}
+print(treeShrubMeanShift)
+```
+
+
+These summaries are helpful, but ultimately, a visualization is often much more useful. Let's plot the results:
+
+```{r}
+treeShrubPlot <- plot(treeShrubMeanShift)
+```
+
+This figure visualizes many of the features of this analysis. First we see the identified intervals of abrupt change, as changes in the mean represented by the red line on the top panel, and as the black bars in the bottom panel, which show the proportion of ensemble members with detected abrupt changes during each 500-year window. Comparing this to the 95th percentile of changes found in the null model makes it clear that the shift that occurred about 39,000 years ago is a robust interval of abrupt change. 
+
+### Links between climate and ecological change
+
+Now that we've identified an interval of rapid change, let's take a look at a nearby climate record, a sea surface temperature (SST) reconstruction from the Gulf of Guinea, to take a first look of whether the change in ecological communities might be driven by climate. Neotoma doesn't host SST reconstuctions, so we'll get these data from lipdverse.org a community repository of LiPD datasets. 
 
 ```{r}
 MD03_2707 <- readLipd("https://lipdverse.org/Temp12k/1_0_2/MD03_2707.Weldeab.2007.ensembles.lpd")
+```
 
+And as before, let's take a look at the map. 
+
+```{r,results = "hide",message= FALSE,warning=FALSE}
 mapLipd(MD03_2707,map.type = "stamen",extend.range = 5)
+```
+
+
+This dataset, originally published by xxx and included in the Temperature 12k compilation, already includes age and temperature ensembles, so we don't have to run another age model. We still will need to map the ensembles to the paleodata and convert it to a lipd-ts-tibble though.
+
+```{r}
 MD03_2707_ts <- mapAgeEnsembleToPaleoData(MD03_2707) %>% as.lipdTsTibble()
 ```
+As before, now we will use `actR` to detect shifts in the mean, while propagating uncertainties, and comparing the results to a robust null hypothesis. This time, since all the data are stored in the LiPD object, we can just pass in the lipd-ts-tibble object directly, and then tell it which dataset we'd like to analyze.
 
-```{r,warning=FALSE}
-MD03_2707_ms <-  actR::detectShift(MD03_2707_ts,
-                   vals.variable.name = "SST_from_d18o_ruber_pink_ensemble",
-                  summary.bin.step = 500,
-                  time.range = c(20000,90000))
+```{r,warning=FALSE, cache=TRUE}
+MD03_2707_ms <-  actR::detectShift(MD03_2707_ts, #the lipd-ts-tibble that includes all the data
+                   vals.variable.name = "SST_from_d18o_ruber_pink_ensemble", #the variable to analyze
+                  summary.bin.step = 500, #same as before
+                  time.range = c(20000,90000)) #same as before
 ```
+
+
+And as before, we can print out the summary:
 
 
 ```{r}
-plot(MD03_2707_ms)
+MD03_2707_ms
 ```
+
+
+Once again, we find some intervals with significant changes in the mean. Let's look at the plot to see how the timing of the abrupt shifts matches the ecological change.
+
+```{r}
+MD03_plot <- plot(MD03_2707_ms)
+```
+
+
+`actR::detectShift()`, with the parameters used here, consistently identifies a change in mean between 80,000 and 70,000 years ago, and provides no evidence that the increase in trees and shrubs inferred from Lake Bambili pollen was associated with a change in SSTs in the nearby Gulf of Guinea. 
+
+Clearly, there is more work to be done here, this example simply highlights how these emerging R packages can be used to efficiently and reproducibly work with paleogeoscientific data from multiple repositories. 
+
+## References
