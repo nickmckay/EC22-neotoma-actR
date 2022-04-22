@@ -50,7 +50,7 @@ keywords:
 knitr::opts_chunk$set(echo = TRUE)
  #install.packages("pacman",repos = "https://cran.rstudio.com/")
  pacman::p_load("dplyr","magrittr","tidyr")
- pacman::p_load_gh("nickmckay/lipdR@neotoma2lipd", "nickmckay/geoChronR", "NeotomaDB/neotoma2", "LinkedEarth/actR")
+ pacman::p_load_gh("nickmckay/lipdR", "nickmckay/geoChronR", "NeotomaDB/neotoma2", "LinkedEarth/actR")
 ```
 
 # Abstract
@@ -59,21 +59,20 @@ The paleogeosciences are becoming more and more interdisciplinary, and studies i
 
 # Purpose
 
-This notebook showcases a workflow that uses emerging tools to efficiently access a pollen dataset from Neotoma (ref), create an age model using Bacon (ref), store the age ensemble and create visualizations using `geoChronR`, before finally conducting age-uncertain change detection using the Abrupt Change Toolkit in R (actR) (ref).
+This notebook showcases a workflow that uses emerging tools to efficiently access a pollen dataset from Neotoma [@williams2018neotoma], create an age model using Bacon [@Blaauw2011BACON], store the age ensemble and create visualizations using `geoChronR` [@geochronrPaper], before finally conducting age-uncertain change detection using the Abrupt Change Toolkit in R (actR) [@actR].
 
 # Technical contributions
 
 This notebook highlights recent advances in multiple R packages
 
-* The new `neotoma2` package (cite)
-* An overhauled `neotoma2lipd()` function in the `lipdR` package
-* Using lipd objects and `geoChronR` to create age models and store ensemble data
-* Conducting robust, age-uncertain, abrupt change analysis on neotoma data using `actR`
+* The new `neotoma2` package [@neotoma2]
+* An overhauled `neotoma2lipd()` function in the `lipdR` package [@lipdR]
+* Using lipd objects and `geoChronR` [@geochronrPaper] to create age models and store ensemble data
+* Conducting robust, age-uncertain, abrupt change analysis on neotoma data using `actR` [@actR]
 
 # Methodology
 
-`neotoma2` leverages Neotoma's xxx API, geojson and S4 structures. `lipdR::neotoma2lipd()` converts `neotoma2` site objects into `lipdR` lipd objects.
-
+`neotoma2` leverages Neotoma's API v2.0 [@neotomaApi]. `lipdR::neotoma2lipd()` converts `neotoma2` site objects into `lipdR` lipd objects. This notebook uses Bacon Bacon [@Blaauw2011BACON] to create an ensemble age-depth model within the `geoChronR` package [@geochronPaper]. The changepoint detection algorithm implemented in `actR` [@actR] which is used in this notebook relies heavily on the `changepoint` package [@killick2014,@changepointPackage].
 
 
 # Results
@@ -91,7 +90,7 @@ Include the recommended citation for the document.  You may choose to use Zenodo
 
 For example:
 
-* EarthCube Office, 2021. EarthCube Notebook Template. Accessed 2/1/2021 at https://github.com/earthcube/NotebookTemplates
+* McKay, N., Emile Geay, J., Khider, D, 2022. Database interoperability, uncertainty quantification and reproducible workflows in the paleogeosciences. Accessed 4/22/2022 at https://github.com/nicmckays
 
 # Acknowledgements
 
@@ -111,9 +110,9 @@ The paleogeosciences are becoming more and more interdisciplinary, and studies i
 
 ### Lake Bambili 
 
-Lake Bambili is a high-elevation (2273 masl) crater lake in Cameroon (05° 56′ 11.9 N, 10°14′ 31.6 E) in the highlands of equatorial West Africa. Recently, Lezine et al. (2019) published a study using pollen data to show changes in forest composition over the past 90,000 years. In this notebook, we'll take a look at abrupt shifts in these pollen assemblages, and compare them changes in a nearby climate record from the Gulf of Guinea.
+Lake Bambili is a high-elevation (2273 masl) crater lake in Cameroon (05° 56′ 11.9 N, 10°14′ 31.6 E) in the highlands of equatorial West Africa. Recently, [@lezine2019] published a study using pollen data to show changes in forest composition over the past 90,000 years. In this notebook, we'll take a look at abrupt shifts in these pollen assemblages, and compare them changes in a nearby climate record from the Gulf of Guinea.
 
-Thankfully, Lezine et al. (2019) archived their pollen assemblage data at Neotoma, and we'll use the `neotoma2` package to access the data, in this case, searching by sitename. 
+Thankfully, Lezine et al. (2019) archived their pollen assemblage data at Neotoma, and we'll use the `neotoma2` package [@neotoma2] to access the data, in this case, searching by sitename. 
 
 ```{r, message=FALSE,results = 'hide'}
 L <- neotoma2::get_sites(sitename = "Bambili 2") %>% #Find the site of interest
@@ -245,7 +244,7 @@ This figure visualizes many of the features of this analysis. First we see the i
 
 ### Links between climate and ecological change
 
-Now that we've identified an interval of rapid change, let's take a look at a nearby climate record, a sea surface temperature (SST) reconstruction from the Gulf of Guinea, to take a first look of whether the change in ecological communities might be driven by climate. Neotoma doesn't host SST reconstuctions, so we'll get these data from lipdverse.org a community repository of LiPD datasets. 
+Now that we've identified an interval of rapid change, let's take a look at a nearby climate record, a sea surface temperature (SST) reconstruction from the Gulf of Guinea [@weldeab2007], to take a first look of whether the change in ecological communities might be driven by climate. Neotoma doesn't host SST reconstuctions, so we'll get these data from lipdverse.org a community repository of LiPD datasets. 
 
 ```{r}
 MD03_2707 <- readLipd("https://lipdverse.org/Temp12k/1_0_2/MD03_2707.Weldeab.2007.ensembles.lpd")
@@ -258,7 +257,7 @@ mapLipd(MD03_2707,map.type = "stamen",extend.range = 5)
 ```
 
 
-This dataset, originally published by xxx and included in the Temperature 12k compilation, already includes age and temperature ensembles, so we don't have to run another age model. We still will need to map the ensembles to the paleodata and convert it to a lipd-ts-tibble though.
+This dataset, originally published by Weldeab et al. (2007) and included in the Temperature 12k compilation[@kaufman2020temp12k], already includes age and temperature ensembles, so we don't have to run another age model. We still will need to map the ensembles to the paleodata and convert it to a lipd-ts-tibble though.
 
 ```{r}
 MD03_2707_ts <- mapAgeEnsembleToPaleoData(MD03_2707) %>% as.lipdTsTibble()
