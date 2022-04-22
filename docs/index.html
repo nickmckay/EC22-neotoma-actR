@@ -244,7 +244,7 @@ University of Southern California<br><a class="author_email" href="mailto:#"><a 
 <h1 number="3"><span class="header-section-number">3</span> Technical contributions</h1>
 <p>This notebook highlights recent advances in multiple R packages</p>
 <ul>
-<li>The new <code>neotoma2</code> package <span class="citation">(Vidana and Goring 2022)</span></li>
+<li>The new <code>neotoma2</code> package <span class="citation">(Dominguez Vidana and Goring 2022)</span></li>
 <li>An overhauled <code>neotoma2lipd()</code> function in the <code>lipdR</code> package <span class="citation">(Heiser and McKay 2022)</span></li>
 <li>Using lipd objects and <code>geoChronR</code> <span class="citation">(N. P. McKay, Emile-Geay, and Khider 2021)</span> to create age models and store ensemble data</li>
 <li>Conducting robust, age-uncertain, abrupt change analysis on neotoma data using <code>actR</code> <span class="citation">(N. McKay and Emile-Geay 2022)</span></li>
@@ -252,7 +252,7 @@ University of Southern California<br><a class="author_email" href="mailto:#"><a 
 </div>
 <div id="methodology" class="section level1" number="4">
 <h1 number="4"><span class="header-section-number">4</span> Methodology</h1>
-<p><code>neotoma2</code> leverages Neotoma’s API v2.0 <span class="citation">(Goring 2022)</span>. <code>lipdR::neotoma2lipd()</code> converts <code>neotoma2</code> site objects into <code>lipdR</code> lipd objects. This notebook uses Bacon Bacon <span class="citation">(Blaauw and Christen 2011)</span> to create an ensemble age-depth model within the <code>geoChronR</code> package <span class="citation">(<strong>geochronPaper?</strong>)</span>. The changepoint detection algorithm implemented in <code>actR</code> <span class="citation">(N. McKay and Emile-Geay 2022)</span> which is used in this notebook relies heavily on the <code>changepoint</code> package <span class="citation">Killick, Haynes, and Eckley (2016)</span>.</p>
+<p><code>neotoma2</code> leverages Neotoma’s API v2.0 <span class="citation">(Goring 2022)</span>. <code>lipdR::neotoma2lipd()</code> converts <code>neotoma2</code> site objects into <code>lipdR</code> lipd objects. This notebook uses Bacon Bacon <span class="citation">(Blaauw and Christen 2011)</span> to create an ensemble age-depth model within the <code>geoChronR</code> package <span class="citation">(N. P. McKay, Emile-Geay, and Khider 2021)</span>. The changepoint detection algorithm implemented in <code>actR</code> <span class="citation">(N. McKay and Emile-Geay 2022)</span> which is used in this notebook relies heavily on the <code>changepoint</code> package <span class="citation">Killick, Haynes, and Eckley (2016)</span>.</p>
 </div>
 <div id="results" class="section level1" number="5">
 <h1 number="5"><span class="header-section-number">5</span> Results</h1>
@@ -267,7 +267,7 @@ University of Southern California<br><a class="author_email" href="mailto:#"><a 
 <p>Include the recommended citation for the document. You may choose to use Zenodo, or another service (such as figShare or your University services) to obtain a DOI for your code repository. If you are using GitHub, consider adding a <a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-citation-files">GitHub Citation file</a>. Ensure that the title in the suggested citation, and the authors match those in your YAML header.</p>
 <p>For example:</p>
 <ul>
-<li>McKay, N., Emile Geay, J., Khider, D, 2022. Database interoperability, uncertainty quantification and reproducible workflows in the paleogeosciences. Accessed 4/22/2022 at <a href="https://github.com/nicmckays" class="uri">https://github.com/nicmckays</a></li>
+<li>McKay, N., Emile Geay, J., Khider, D, 2022. Database interoperability, uncertainty quantification and reproducible workflows in the paleogeosciences. Accessed 4/22/2022 at <a href="https://github.com/nickmckay/EC22-neotoma-actR" class="uri">https://github.com/nickmckay/EC22-neotoma-actR</a></li>
 </ul>
 </div>
 <div id="acknowledgements" class="section level1" number="8">
@@ -279,7 +279,7 @@ University of Southern California<br><a class="author_email" href="mailto:#"><a 
 <p>You will need to download the Rmd, HTML and bibtex file from the earthcube repository, store it in a single directory and then set up a project (see <a href="https://swcarpentry.github.io/r-novice-gapminder/02-project-intro/">this link</a> for further discussion of this.) Then you can either knit the markdown file, or run the cells interactively.</p>
 <div id="packages" class="section level2" number="9.1">
 <h2 number="9.1"><span class="header-section-number">9.1</span> Packages</h2>
-<p>Install all the required packages in the R setup section at the head of this document. As noted previously, use pacman to do the installation. Alternatively, use the <code>install.R</code> script in the repository, or run on mybinder, if that ever works.</p>
+<p>Install all the required packages in the R setup section at the head of this document. As noted previously, use pacman to do the installation. Alternatively, use the <code>install.R</code> script in the repository to help install some of the github packages prior to the pacman cells. Running the notebook on <a href="https://mybinder.org/v2/gh/nickmckay/EC22-neotoma-actR/main?urlpath=rstudio">mybinder</a>, is also an option.</p>
 </div>
 <div id="data-processing-and-analysis" class="section level2" number="9.2">
 <h2 number="9.2"><span class="header-section-number">9.2</span> Data processing and analysis</h2>
@@ -287,7 +287,7 @@ University of Southern California<br><a class="author_email" href="mailto:#"><a 
 <div id="lake-bambili" class="section level3" number="9.2.1">
 <h3 number="9.2.1"><span class="header-section-number">9.2.1</span> Lake Bambili</h3>
 <p>Lake Bambili is a high-elevation (2273 masl) crater lake in Cameroon (05° 56′ 11.9 N, 10°14′ 31.6 E) in the highlands of equatorial West Africa. Recently, <span class="citation">(Lézine et al. 2019)</span> published a study using pollen data to show changes in forest composition over the past 90,000 years. In this notebook, we’ll take a look at abrupt shifts in these pollen assemblages, and compare them changes in a nearby climate record from the Gulf of Guinea.</p>
-<p>Thankfully, Lezine et al. (2019) archived their pollen assemblage data at Neotoma, and we’ll use the <code>neotoma2</code> package <span class="citation">(Vidana and Goring 2022)</span> to access the data, in this case, searching by sitename.</p>
+<p>Thankfully, Lezine et al. (2019) archived their pollen assemblage data at Neotoma, and we’ll use the <code>neotoma2</code> package <span class="citation">(Dominguez Vidana and Goring 2022)</span> to access the data, in this case, searching by sitename.</p>
 <pre class="r"><code>L &lt;- neotoma2::get_sites(sitename = &quot;Bambili 2&quot;) %&gt;% #Find the site of interest
   neotoma2::get_downloads() %&gt;% #download the data for this site
   lipdR::neotoma2lipd() #convert the site object into a LiPD object</code></pre>
@@ -472,6 +472,9 @@ University of Southern California<br><a class="author_email" href="mailto:#"><a 
 <div id="ref-Blaauw2011BACON" class="csl-entry">
 Blaauw, M., and J. A. Christen. 2011. <span>“Flexible Paleoclimate Age-Depth Models Using an Autoregressive Gamma Process.”</span> <em>Bayesian Analysis</em> 6 (3): 457–74.
 </div>
+<div id="ref-neotoma2" class="csl-entry">
+Dominguez Vidana, Socorro, and Simon Goring. 2022. <span>“Neotoma2 r Package.”</span> <a href="https://github.com/neotomadb/neotoma2">https://github.com/neotomadb/neotoma2</a>.
+</div>
 <div id="ref-neotomaApi" class="csl-entry">
 Goring, Simon. 2022. <span>“Neotoma API 2.0.”</span> <a href="	https://api.neotomadb.org/api-docs/
 ">	https://api.neotomadb.org/api-docs/
@@ -497,9 +500,6 @@ McKay, Nicholas P, Julien Emile-Geay, and Deborah Khider. 2021. <span>“geoChro
 </div>
 <div id="ref-actR" class="csl-entry">
 McKay, Nicholas, and Julien Emile-Geay. 2022. <span>“Abrupt Change Toolkit in r.”</span> <a href="http://linked.earth/actR/">http://linked.earth/actR/</a>.
-</div>
-<div id="ref-neotoma2" class="csl-entry">
-Vidana, Socorro Dominguez, and ApiSimon Goring. 2022. <span>“Neotoma2 r Package.”</span> <a href="https://github.com/neotomadb/neotoma2">https://github.com/neotomadb/neotoma2</a>.
 </div>
 <div id="ref-weldeab2007" class="csl-entry">
 Weldeab, Syee, David W Lea, Ralph R Schneider, and Nils Andersen. 2007. <span>“155,000 Years of West African Monsoon and Ocean Thermal Evolution.”</span> <em>Science</em> 316 (5829): 1303–7.

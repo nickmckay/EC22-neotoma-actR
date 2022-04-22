@@ -72,7 +72,7 @@ This notebook highlights recent advances in multiple R packages
 
 # Methodology
 
-`neotoma2` leverages Neotoma's API v2.0 [@neotomaApi]. `lipdR::neotoma2lipd()` converts `neotoma2` site objects into `lipdR` lipd objects. This notebook uses Bacon Bacon [@Blaauw2011BACON] to create an ensemble age-depth model within the `geoChronR` package [@geochronPaper]. The changepoint detection algorithm implemented in `actR` [@actR] which is used in this notebook relies heavily on the `changepoint` package [@killick2014,@changepointPackage].
+`neotoma2` leverages Neotoma's API v2.0 [@neotomaApi]. `lipdR::neotoma2lipd()` converts `neotoma2` site objects into `lipdR` lipd objects. This notebook uses Bacon Bacon [@Blaauw2011BACON] to create an ensemble age-depth model within the `geoChronR` package [@geochronrPaper]. The changepoint detection algorithm implemented in `actR` [@actR] which is used in this notebook relies heavily on the `changepoint` package [@killick2014,@changepointPackage].
 
 
 # Results
@@ -90,7 +90,7 @@ Include the recommended citation for the document.  You may choose to use Zenodo
 
 For example:
 
-* McKay, N., Emile Geay, J., Khider, D, 2022. Database interoperability, uncertainty quantification and reproducible workflows in the paleogeosciences. Accessed 4/22/2022 at https://github.com/nicmckays
+* McKay, N., Emile Geay, J., Khider, D, 2022. Database interoperability, uncertainty quantification and reproducible workflows in the paleogeosciences. Accessed 4/22/2022 at https://github.com/nickmckay/EC22-neotoma-actR
 
 # Acknowledgements
 
