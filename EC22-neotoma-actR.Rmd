@@ -49,7 +49,7 @@ keywords:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
  #install.packages("pacman",repos = "https://cran.rstudio.com/")
- pacman::p_load("dplyr","magrittr","tidyr")
+ pacman::p_load("dplyr","magrittr","tidyr","raster")
  pacman::p_load_gh("nickmckay/lipdR", "nickmckay/geoChronR", "NeotomaDB/neotoma2", "LinkedEarth/actR")
 ```
 
@@ -101,7 +101,7 @@ Thank you to Socorro Dominguez Vidana and Simon Goring for their work on the `ne
 You will need to download the Rmd, HTML and bibtex file from the earthcube repository, store it in a single directory and then set up a project (see [this link](https://swcarpentry.github.io/r-novice-gapminder/02-project-intro/) for further discussion of this.) Then you can either knit the markdown file, or run the cells interactively. 
 
 ## Packages 
-Install all the required packages in the R setup section at the head of this document. As noted previously, use pacman to do the installation. Alternatively, use the `install.R` script in the repository, or run on mybinder, if that ever works.
+Install all the required packages in the R setup section at the head of this document. As noted previously, use pacman to do the installation. Alternatively, use the `install.R` script in the repository to help install some of the github packages prior to the pacman cells. Running the notebook on [mybinder](https://mybinder.org/v2/gh/nickmckay/EC22-neotoma-actR/main?urlpath=rstudio), is also an option.
 
 ## Data processing and analysis
 
