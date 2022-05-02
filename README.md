@@ -1,7 +1,7 @@
 <!-- badges: start -->
 [![Launch Rstudio Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/nickmckay/EC22-neotoma-actR/main?urlpath=rstudio)
 
-[![NSF-XXXXXXX](https://img.shields.io/badge/NSF-XXXXXXX-blue.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=XXXXXXX) [![NSF-XXXXXXX](https://img.shields.io/badge/NSF-XXXXXXX-blue.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=XXXXXXX)
+[![NSF-1929460](https://img.shields.io/badge/NSF-1929460-blue.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1929460)[![NSF-1347221](https://img.shields.io/badge/NSF-1347221-blue.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1347221)
 
 # Database interoperability, uncertainty quantification and reproducible workflows in the paleogeosciences
 
@@ -15,9 +15,9 @@ The paleogeosciences are becoming more and more interdisciplinary, and studies i
 
 This project is an open project, and contributions are welcome from any individual.  All contributors to this project are bound by a [code of conduct](CODE_OF_CONDUCT.md).  Please review and follow this code of conduct as part of your contribution.
 
-  * [Nicholas McKay](http://nau.edu/mckay) [![orcid](https://img.shields.io/badge/orcid-XXXX--XXXX--XXXX--XXXX-brightgreen.svg)](https://orcid.org/0000-0003-3598-5113)
-  * [Julien Emile-Geay](http://climdyn.usc.edu/) [![orcid](https://img.shields.io/badge/orcid-XXXX--XXXX--XXXX--XXXX-brightgreen.svg)](https://orcid.org/0000-0001-5920-4751)
-  * [Deborah Khider](https://earth.usc.edu/~khider/) [![orcid](https://img.shields.io/badge/orcid-XXXX--XXXX--XXXX--XXXX-brightgreen.svg)](https://orcid.org/0000-0001-7501-8430)
+  * [Nicholas McKay](http://nau.edu/mckay) [![orcid](https://img.shields.io/badge/orcid-0000--0003--3598--5113-brightgreen.svg)](https://orcid.org/0000-0003-3598-5113)
+  * [Julien Emile-Geay](http://climdyn.usc.edu/) [![orcid](https://img.shields.io/badge/orcid-0000--0001--5920--4751-brightgreen.svg)](https://orcid.org/0000-0001-5920-4751)
+  * [Deborah Khider](https://earth.usc.edu/~khider/) [![orcid](https://img.shields.io/badge/orcid-0000--0001--7501--8430-brightgreen.svg)](https://orcid.org/0000-0001-7501-8430)
 
 ### Tips for Contributing
 
