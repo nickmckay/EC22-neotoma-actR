@@ -39,7 +39,7 @@ This project takes data from [neotoma](https://neotomadb.org) and [lipdverse](ht
 
 ### System Requirements
 
-This project is developed using R, and should run on any platform.integration uses TravisCI (?).
+This project is developed using R, and should run on any platform.
 
 ### Data Requirements
 
@@ -47,4 +47,4 @@ This project takes data from [neotoma](https://neotomadb.org) and [lipdverse](ht
 
 ### Key Outputs
 
-This project generates a notebook. The [rendered notebook is available here](https://nickmckay.github.io/).EC22-neotoma-actR)
+This project generates a notebook. The [rendered notebook is available here](https://nickmckay.github.io/EC22-neotoma-actR)
