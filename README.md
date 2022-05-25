@@ -1,7 +1,11 @@
 <!-- badges: start -->
 [![Launch Rstudio Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/nickmckay/EC22-neotoma-actR/main?urlpath=rstudio)
+[![NSF-1929460](https://img.shields.io/badge/NSF-1929460-blue.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1929460)
+[![NSF-1347221](https://img.shields.io/badge/NSF-1347221-blue.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1347221)
+[![NSF-1540996](https://img.shields.io/badge/NSF-1540996-blue.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1540996)
+[![NSF-2126510](https://img.shields.io/badge/NSF-2126510-blue.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=2126510)
 
-[![NSF-1929460](https://img.shields.io/badge/NSF-1929460-blue.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1929460)[![NSF-1347221](https://img.shields.io/badge/NSF-1347221-blue.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1347221)
+(This Binder is slow - please be patient, or check out the [rendered version](https://nickmckay.github.io/EC22-neotoma-actR/).)
 
 # Database interoperability, uncertainty quantification and reproducible workflows in the paleogeosciences
 

@@ -49,7 +49,7 @@ keywords:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
  #install.packages("pacman",repos = "https://cran.rstudio.com/")
- pacman::p_load("dplyr","magrittr","tidyr","raster")
+ pacman::p_load("dplyr","magrittr","tidyr","raster","ggplot2")
  pacman::p_load_gh("nickmckay/lipdR", "nickmckay/geoChronR", "NeotomaDB/neotoma2", "LinkedEarth/actR")
 ```
 
@@ -81,7 +81,9 @@ This notebook demonstrates how the Linked PaleoData (LiPD) framework can be used
 
 # Funding
 
-This project is funded as part of the Belmont Forum's Science-driven e-Infrastructure Innovation (SEI) initiative. In the US, this is NSF award ICER-1929460.
+This notebook describes several LinkedEarth activities. LinkedEarth is a community of paleoscientists working to develop standards and software to enable paleoscience in the era of Big Data. This community produces data products and standards, software, cyberinfrastructure, and training opportunities. LinkedEarth was launched as part of an EarthCube Integrative Activities project funded project (ICER-1540996), and is currently supported by an EarthCube Data Capabilities project (ICER-2126510).
+
+Neotoma-LiPD interoperability, and the Abrubt Change Toolkit in R (actR) are LinkedEarth activities that are funded as part of the Belmont Forum's Science-driven e-Infrastructure Innovation (SEI) initiative. In the US, this is NSF award ICER-1929460.
 
 
 # Citation
@@ -108,6 +110,8 @@ Install all the required packages in the R setup section at the head of this doc
 The paleogeosciences are becoming more and more interdisciplinary, and studies increasingly rely on large collections of data derived from multiple data repositories. Integrating diverse datasets from multiple sources into complex workflows increases the challenge of creating reproducible and open science, as data formats and tools are often noninteroperable, requiring manual manipulation of data into standardized formats, resulting in a disconnect in data provenance and confounding reproducibility. Here, we illustrate a use case where a scientist wants to conduct age-uncertain abrupt-change analysis on two datasets from Africa - a pollen record from Lake Bambili, and a temperature reconstruction from the Gulf of Guinea. 
 
 
+
+
 ### Lake Bambili 
 
 Lake Bambili is a high-elevation (2273 masl) crater lake in Cameroon (05° 56′ 11.9 N, 10°14′ 31.6 E) in the highlands of equatorial West Africa. Recently, [@lezine2019] published a study using pollen data to show changes in forest composition over the past 90,000 years. In this notebook, we'll take a look at abrupt shifts in these pollen assemblages, and compare them changes in a nearby climate record from the Gulf of Guinea.
@@ -120,12 +124,12 @@ L <- neotoma2::get_sites(sitename = "Bambili 2") %>% #Find the site of interest
   lipdR::neotoma2lipd() #convert the site object into a LiPD object
 ```
 
-Now that we've downloaded the data and converted it to a LiPD object, it's ready to be used in LinkedEarth's ecosystem of tools built around the LiPD standard (e.g., geoChronR, actR, pyleoclim)
+Now that we've downloaded the data and converted it to a LiPD object, it's ready to be used in LinkedEarth's ecosystem of tools built around the LiPD standard (e.g., geoChronR, actR, pyleoclim).
 
 First, let's quickly create a map using the `mapLipd()` function in geoChronR to visualize Lake Bambili's location in equatorial west Africa. 
 
 
-```{r,results = "hide",message= FALSE,warning=FALSE}
+```{r,results = "hide",message= FALSE,warning=FALSE, fig.cap = "**Figure 1.** Map of Africa showing the location of Lake Bambili."}
 mapLipd(L,map.type = "stamen",extend.range = 5)
 ```
 
@@ -150,8 +154,8 @@ L <- geoChronR::runBacon(L,
 
 Now that the age model has finished running and the results are stored in the LiPD object, let's plot the results. 
 
-```{r}
-plotChronEns(L)
+```{r,fig.cap = "**Figure 2**. Age depth model for Lake Bambili, generated using Bacon. Ages (and their uncertainties) are shown as purple distributions. The median age model is shown in black, along with the 50 and 95% highest probability density regions in dark and light gray, respectively. Five randomly selected age ensemble members are shown in red."}
+plotChronEns(L) + ggtitle("Age - depth model for Lake Bambili")
 ```
 
 Great, the uncertainties represented here are what we'd like to propagate through the abrupt change analysis. To do this, the first step is to "map" the age ensemble from the age model to the depths of the pollen data stored in the paleoData tables. 
@@ -202,8 +206,8 @@ treeShrubPercent <- TRSH$total/total$total * 100
 
 
 Now let's plot that percentage, along with the age ensemble, to visualize these data and their corresponding age uncertainties.
-```{r}
-geoChronR::plotTimeseriesEnsRibbons(X = ageEnsemble, Y =  treeShrubPercent)
+```{r,fig.cap = "**Figure 3**. The relative abundance of tree and shrub pollen at Lake Bambili from ca. 90 to 20 ka, with associated age uncertainties. The median estimate is shown in black, along with the 50 and 95% highest probability density regions in dark and light gray, respectively."}
+geoChronR::plotTimeseriesEnsRibbons(X = ageEnsemble, Y =  treeShrubPercent) + ylab("Relative abundance of tree and shrub pollen (%)") + ggtitle("Tree/shrub pollen abundance at Lake Bambili.")
 ```
 
 
@@ -236,11 +240,11 @@ print(treeShrubMeanShift)
 
 These summaries are helpful, but ultimately, a visualization is often much more useful. Let's plot the results:
 
-```{r}
+```{r,fig.cap = "**Figure 4**. Results of the actR shift detection analysis for Lake Bambili tree and shrub abundance. Top panel: as in figure 3, except with red lines identifying the mean of intervals separated by significant detected shifts in the mean. Bottom panel: The black bars show the fraction of ensemble members for which a shift was detected during a each 500 year window, and the orange lines show 90 and 95th percentile thresholds results of the robust null hypothesis testing. Where the observed frequencies exceed the null hypothesis marks intervals where the detected shifts are robust at that confidence level."}
 treeShrubPlot <- plot(treeShrubMeanShift)
 ```
 
-This figure visualizes many of the features of this analysis. First we see the identified intervals of abrupt change, as changes in the mean represented by the red line on the top panel, and as the black bars in the bottom panel, which show the proportion of ensemble members with detected abrupt changes during each 500-year window. Comparing this to the 95th percentile of changes found in the null model makes it clear that the shift that occurred about 39,000 years ago is a robust interval of abrupt change. 
+Figure 4 visualizes many of the features of this analysis. First we see the identified intervals of abrupt change, as changes in the mean represented by the red line on the top panel, and as the black bars in the bottom panel, which show the proportion of ensemble members with detected abrupt changes during each 500-year window. Comparing this to the 95th percentile of changes found in the null model makes it clear that the shift that occurred about 71,000 years ago is a robust interval of abrupt change. 
 
 ### Links between climate and ecological change
 
@@ -252,12 +256,12 @@ MD03_2707 <- readLipd("https://lipdverse.org/Temp12k/1_0_2/MD03_2707.Weldeab.200
 
 And as before, let's take a look at the map. 
 
-```{r,results = "hide",message= FALSE,warning=FALSE}
+```{r,results = "hide",message= FALSE,warning=FALSE,fig.cap = "**Figure 5**. Location of core MD03-2707 in the Gulf of Guinea."}
 mapLipd(MD03_2707,map.type = "stamen",extend.range = 5)
 ```
 
 
-This dataset, originally published by Weldeab et al. (2007) and included in the Temperature 12k compilation[@kaufman2020temp12k], already includes age and temperature ensembles, so we don't have to run another age model. We still will need to map the ensembles to the paleodata and convert it to a lipd-ts-tibble though.
+This dataset, originally published by Weldeab et al. (2007) and included in the Temperature 12k compilation [@kaufman2020temp12k], already includes age and temperature ensembles, so we don't have to run another age model. We still will need to map the ensembles to the paleodata and convert it to a lipd-ts-tibble though.
 
 ```{r}
 MD03_2707_ts <- mapAgeEnsembleToPaleoData(MD03_2707) %>% as.lipdTsTibble()
@@ -282,13 +286,29 @@ MD03_2707_ms
 
 Once again, we find some intervals with significant changes in the mean. Let's look at the plot to see how the timing of the abrupt shifts matches the ecological change.
 
-```{r}
+```{r,fig.cap="**Figure 6**. Results of the actR shift detection analysis for MDO3-2707 sea surface temperature estimates. Panels as in figure 4."}
 MD03_plot <- plot(MD03_2707_ms)
 ```
 
 
-`actR::detectShift()`, with the parameters used here, consistently identifies a change in mean between 80,000 and 70,000 years ago, and provides no evidence that the increase in trees and shrubs inferred from Lake Bambili pollen was associated with a change in SSTs in the nearby Gulf of Guinea. 
+`actR::detectShift()`, with the parameters used here, consistently identifies a change in mean between 80,000 and 70,000 years ago, which suggests that the shift in Gulf of Guinea temperatures may have slightly proceeded or occurred simultaneously with the decrease in trees and shrubs inferred from Lake Bambili pollen.
 
-Clearly, there is more work to be done here, this example simply highlights how these emerging R packages can be used to efficiently and reproducibly work with paleogeoscientific data from multiple repositories. 
+To compare the results directly, we plot the likelihood of each of the shifts on the same figure. 
+
+```{r,fig.cap = "**Figure 7**. Detected shift frequency at Lake Bambili and in the Gulf Guinea. The fraction of ensemble members for which a shift was detected during a each 500 year window for each record, as shown in figures 4 and 6."}
+ggplot() + 
+  geom_area(data = MD03_2707_ms$shiftDetection, aes(y = event_probability, x = time_mid, fill = "Gulf of Guinea SSTs")) +
+    geom_area(data = treeShrubMeanShift$shiftDetection, aes(y = event_probability, x = time_mid, fill = "Lake Bambili Tree/Shrub percentage"), alpha = 0.8) + 
+  scale_fill_brewer("Dataset",palette = "Set1")+
+  scale_x_reverse("Age (yr BP)") + 
+  ylab("Shift probability") + 
+  theme_bw() + 
+  ggtitle("Detected shifts in equatorial West Africa")
+
+```
+
+Clearly, there is more work to be done here to explore how changes in climate lead to community change in afromontane forests. This example simply highlights how these emerging tools can be used to efficiently and reproducibly work with paleogeoscientific data from multiple repositories. 
+
+Without these tools, preparing the data for analysis would be tedious, as the structure of the data can be heterogeneous. For example, without `neotoma2` and `neotoma2lipd()`, a user would access the Lake Bambili data by navigating the [Neotoma Explorer website](https://apps.neotomadb.org/explorer/?datasetids=40944), finding Lake Bambili, and downloading csv files before manipulating for various analyses. The Gulf of Guinea SST data can be found at [NOAA's World Data Service for Paleoclimatology](https://www.ncei.noaa.gov/pub/data/paleo/contributions_by_author/weldeab2007/weldeab2007.txt), and downloaded as a text file. The user would then edit that file as necessary before loading and manipulating for subsequent analysis.
 
 ## References
